@@ -1,0 +1,28 @@
+/* Styling for the element */
+.scale-element {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Define the keyframes for the animation */
+@keyframes scale-from-center {
+  from {
+    /* Start with a scale of 0 (invisible) */
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    /* End with a scale of 1 (full size) */
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Apply the animation to the element */
+.scale-element {
+  animation-name: scale-from-center;
+  animation-duration: 0.3s; /* The length of the animation */
+  animation-timing-function: ease-out; /* The speed curve of the animation */
+  animation-fill-mode: forwards; /* This is crucial for running once and staying at the end state */
+  animation-iteration-count: 1; /* Ensures the animation runs only once */
+}
