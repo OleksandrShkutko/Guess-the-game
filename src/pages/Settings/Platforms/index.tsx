@@ -7,7 +7,11 @@ import {
   Grid,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { PLATFORMS } from '../../../constants';
+import {
+  PLATFORMS,
+  PLATFORMS_SESECTIONS,
+  type PlatformsSelectionVariant,
+} from '../../../constants';
 import { useSelector } from 'react-redux';
 import type { StoreType } from '../../../store';
 
@@ -20,19 +24,28 @@ const Platforms = ({ setPlatforms }: PlatformsProps) => {
     (state: StoreType) => state.settings.selectedPlatforms
   );
 
-  const [platformsSelection, setPlatformsSelection] = useState(
-    selectedPlatformsInitial.length ? 'select' : 'all'
-  );
+  const [platformsSelection, setPlatformsSelection] =
+    useState<PlatformsSelectionVariant>(
+      selectedPlatformsInitial.length
+        ? PLATFORMS_SESECTIONS.select.value
+        : PLATFORMS_SESECTIONS.all.value
+    );
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(
     selectedPlatformsInitial
   );
 
   useEffect(() => {
-    setPlatforms(platformsSelection === 'select' ? selectedPlatforms : []);
+    setPlatforms(
+      platformsSelection === PLATFORMS_SESECTIONS.select.value
+        ? selectedPlatforms
+        : []
+    );
   }, [platformsSelection, selectedPlatforms]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPlatformsSelection((event.target as HTMLInputElement).value);
+    setPlatformsSelection(
+      (event.target as HTMLInputElement).value as PlatformsSelectionVariant
+    );
   };
 
   const handlePlatformSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,16 +73,20 @@ const Platforms = ({ setPlatforms }: PlatformsProps) => {
         onChange={handleChange}
         sx={{ mt: 2 }}
       >
-        <FormControlLabel value='all' control={<Radio />} label='All' />
         <FormControlLabel
-          value='select'
+          value={PLATFORMS_SESECTIONS.all.value}
           control={<Radio />}
-          label='Select manually'
-          checked={platformsSelection === 'select'}
+          label={PLATFORMS_SESECTIONS.all.label}
+        />
+        <FormControlLabel
+          value={PLATFORMS_SESECTIONS.select.value}
+          control={<Radio />}
+          label={PLATFORMS_SESECTIONS.select.label}
+          checked={platformsSelection === PLATFORMS_SESECTIONS.select.value}
         />
       </RadioGroup>
 
-      {platformsSelection === 'select' && (
+      {platformsSelection === PLATFORMS_SESECTIONS.select.value && (
         <Grid mt={2} spacing={1} container>
           {Object.keys(PLATFORMS).map((platform) => {
             return (
