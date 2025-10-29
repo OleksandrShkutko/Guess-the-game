@@ -212,7 +212,7 @@ const GamePage = () => {
           <>
             {!error ? (
               <>
-                {gameInfo && countOfGames >= 1 && (
+                {gameInfo && countOfGames >= 100 && (
                   <>
                     <GameScore score={gameScore} />
                     <GameContext.Provider
@@ -223,10 +223,10 @@ const GamePage = () => {
                     </GameContext.Provider>
                   </>
                 )}
-                {gameInfo && countOfGames < 1 && <NotEnoughGames />}
+                {gameInfo && countOfGames < 100 && <NotEnoughGames />}
               </>
             ) : (
-              <ErrorBlock error={error} />
+              <ErrorBlock error={error} getNewGame={getNewGame} />
             )}
           </>
         )}
