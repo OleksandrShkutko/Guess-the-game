@@ -15,6 +15,8 @@ import {
 } from '../../store';
 import BottomButtons from './components/BottomButtons';
 import QuitGameDialog from './components/QuitGameDialog';
+import NotEnoughGames from './components/NotEnoughGames';
+import ErrorBlock from './components/ErrorBlock';
 
 type GameContextType = {
   isCorrectAnswer: boolean | null;
@@ -33,7 +35,8 @@ const GamePage = () => {
   // Get total count of games from loader data
   const countOfGames: number = useLoaderData();
 
-  const [isPending, setIsPending] = useState(false);
+  // Component states
+  const [isPending, setIsPending] = useState(true);
   const [gameInfo, setGameInfo] = useState<Game | null>(null);
   const [gamesNames, setGamesNames] = useState<GamesNames>([]);
   const [gameScore, setGameScore] = useState(0);
@@ -203,18 +206,30 @@ const GamePage = () => {
   return (
     <>
       <CenteredContainer>
-        {isPending && <Spinner />}
-
-        {gameInfo && !isPending && (
+        {isPending ? (
+          <Spinner />
+        ) : (
           <>
-            <GameScore score={gameScore} />
-            <GameContext.Provider value={{ isCorrectAnswer, getNewGame }}>
-              <GameBlock gameInfo={gameInfo} gamesNames={gamesNames} />
-              <BottomButtons />
-            </GameContext.Provider>
+            {!error ? (
+              <>
+                {gameInfo && countOfGames >= 1 && (
+                  <>
+                    <GameScore score={gameScore} />
+                    <GameContext.Provider
+                      value={{ isCorrectAnswer, getNewGame }}
+                    >
+                      <GameBlock gameInfo={gameInfo} gamesNames={gamesNames} />
+                      <BottomButtons />
+                    </GameContext.Provider>
+                  </>
+                )}
+                {gameInfo && countOfGames < 1 && <NotEnoughGames />}
+              </>
+            ) : (
+              <ErrorBlock error={error} />
+            )}
           </>
         )}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
       </CenteredContainer>
 
       <QuitGameDialog score={gameScore} />
