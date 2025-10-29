@@ -13,6 +13,19 @@ const customTheme = createTheme({
     fontFamily: '"Press Start 2P"',
   },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          '&.MuiButton-loading': {
+            opacity: 0.7,
+            backgroundColor: '#F8D60B',
+          },
+          '& .MuiButton-loadingIndicator': {
+            color: '#000000',
+          },
+        },
+      },
+    },
     MuiFormLabel: {
       styleOverrides: {
         root: {
