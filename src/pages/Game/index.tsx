@@ -56,12 +56,22 @@ const GamePage = () => {
 
   // Ref to track if component has mounted
   const hasMounted = useRef(false);
-  // On initial mount, fetch a new random game
+
   useEffect(() => {
+    // On initial mount, fetch a new random game
     if (!hasMounted.current) {
       hasMounted.current = true;
       getNewGame();
     }
+
+    // Detect page refresh and show alert
+    const unloadCallback = (event: BeforeUnloadEvent): string | void => {
+      event.preventDefault();
+      return '';
+    };
+
+    window.addEventListener('beforeunload', unloadCallback);
+    return () => window.removeEventListener('beforeunload', unloadCallback);
   }, []);
 
   // When gameInfo changes, fetch similar games and update gamesNames
