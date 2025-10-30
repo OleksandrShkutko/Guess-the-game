@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Button, Tooltip, Typography } from '@mui/material';
 import type { ButtonColor } from '../../../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAnswer, type StoreType } from '../../../../store';
+import { GameContext } from '../..';
 
 type AnswerButtonProps = {
   children: string;
@@ -12,6 +13,10 @@ const AnswerButton = ({ children }: AnswerButtonProps) => {
   const dispatch = useDispatch();
 
   const [buttonColor, setButtonColor] = useState<ButtonColor>('primary');
+
+  // Get data from GameContext
+  const disabled =
+    useContext(GameContext).isCorrectAnswer !== null ? true : false;
 
   // Get data from the store
   const rightAnsver = useSelector(
@@ -40,12 +45,20 @@ const AnswerButton = ({ children }: AnswerButtonProps) => {
   return (
     <Tooltip title={children} arrow enterDelay={500} enterNextDelay={500}>
       <Button
-        sx={{ whiteSpace: 'nowrap', maxWidth: '500px' }}
+        sx={{
+          whiteSpace: 'nowrap',
+          maxWidth: '500px',
+          '&.Mui-disabled': {
+            color: `${buttonColor}.contrastText`,
+            backgroundColor: `${buttonColor}.main`,
+          },
+        }}
         name={children}
         fullWidth
         variant='contained'
         onClick={handleClick}
         color={buttonColor}
+        disabled={disabled}
       >
         <Typography
           noWrap

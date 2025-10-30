@@ -23,6 +23,9 @@ const customTheme = createTheme({
           '& .MuiButton-loadingIndicator': {
             color: '#000000',
           },
+          '&.Mui-disabled': {
+            opacity: 0.6,
+          },
         },
       },
     },
