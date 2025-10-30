@@ -146,7 +146,7 @@ const GamePage = () => {
     dispatch(setAnswer(''));
 
     const randomGameNumber: number = getRandomInt(1, countOfGames);
-    const finalRequestUrl: string = `${requestUrl}&page=${randomGameNumber}&${DEFAULT_QUERY_FOR_ONE_GAME}`;
+    const finalRequestUrl: string = `${requestUrl}&page=${randomGameNumber}${DEFAULT_QUERY_FOR_ONE_GAME}`;
 
     const gameInfoObj = await requestRandomGame(finalRequestUrl);
 
@@ -161,11 +161,14 @@ const GamePage = () => {
     countOfGamesWithGenre: number
   ): Promise<void> => {
     const formatGenres = genres.map((genre) => genre).join(',');
+    const formatGenresQueryString = formatGenres
+      ? `&genres=${formatGenres}`
+      : '';
     const randomGameWithGenreNumber: number = getRandomInt(
       1,
       countOfGamesWithGenre
     );
-    const finalRequestUrl: string = `${requestUrl}&page=${randomGameWithGenreNumber}&genres=${formatGenres}&${DEFAULT_QUERY_FOR_ONE_GAME}`;
+    const finalRequestUrl: string = `${requestUrl}${DEFAULT_QUERY_FOR_ONE_GAME}${formatGenresQueryString}&page=${randomGameWithGenreNumber}`;
 
     const gameWithGenreInfoObj = await requestRandomGame(finalRequestUrl);
 
@@ -177,11 +180,15 @@ const GamePage = () => {
   // Gets the total count of games with the specified genres
   const getCountOfGamesWithGenre = async (genres: Genres): Promise<number> => {
     const formatGenres = genres.map((genre) => genre).join(',');
+    const formatGenresQueryString = formatGenres
+      ? `&genres=${formatGenres}`
+      : '';
     const response = await fetch(
-      `${requestUrl}&genres=${formatGenres}&${DEFAULT_QUERY_FOR_ONE_GAME}`
+      `${requestUrl}${DEFAULT_QUERY_FOR_ONE_GAME}${formatGenresQueryString}`
     );
     const data = await response.json();
-    const countOfGamesWithGenre: number = data.count;
+    const countOfGamesWithGenre: number =
+      data.count <= 10000 ? data.count : 10000;
 
     return countOfGamesWithGenre;
   };

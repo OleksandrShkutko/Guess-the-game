@@ -62,9 +62,9 @@ function App() {
 
   // Loader function to get the total count of games
   const countOfGames = async (): Promise<number> => {
-    const response = await fetch(`${requestUrl}&${DEFAULT_QUERY_FOR_ONE_GAME}`);
+    const response = await fetch(`${requestUrl}${DEFAULT_QUERY_FOR_ONE_GAME}`);
     const data = await response.json();
-    const countOfGames: number = data.count;
+    const countOfGames: number = data.count <= 10000 ? data.count : 10000;
 
     return countOfGames;
   };

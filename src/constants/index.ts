@@ -1,7 +1,7 @@
 // API constants
 export const API_ROUTE = 'https://api.rawg.io/api';
 export const API_KEY = '88e766ec5eab4f58a54e1dd4b35321d2';
-export const DEFAULT_QUERY_FOR_ONE_GAME = 'page_size=1&metacritic=10,100';
+export const DEFAULT_QUERY_FOR_ONE_GAME = '&page_size=1';
 
 // Platform constants
 export type PlatformsSelectionVariant = 'all' | 'select';
