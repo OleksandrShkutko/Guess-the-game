@@ -21,10 +21,12 @@ type PlatformsProps = {
 };
 
 const Platforms = ({ setPlatforms }: PlatformsProps) => {
+  // Get best session score from the store
   const selectedPlatformsInitial = useSelector(
     (state: StoreType) => state.settings.selectedPlatforms
   );
 
+  // Component states
   const [platformsSelection, setPlatformsSelection] =
     useState<PlatformsSelectionVariant>(
       selectedPlatformsInitial.length
@@ -35,6 +37,7 @@ const Platforms = ({ setPlatforms }: PlatformsProps) => {
     selectedPlatformsInitial
   );
 
+  // Set selected platforms array
   useEffect(() => {
     setPlatforms(
       platformsSelection === PLATFORMS_SELECTIONS.select.value
@@ -43,6 +46,7 @@ const Platforms = ({ setPlatforms }: PlatformsProps) => {
     );
   }, [platformsSelection, selectedPlatforms]);
 
+  // Events
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPlatformsSelection(
       (event.target as HTMLInputElement).value as PlatformsSelectionVariant

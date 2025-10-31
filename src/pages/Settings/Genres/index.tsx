@@ -22,10 +22,12 @@ type SetGenresProp = {
 };
 
 const Genres = ({ setGenres }: SetGenresProp) => {
+  // Get best session score from the store
   const selectedGenresInitial = useSelector(
     (state: StoreType) => state.settings.selectedGenres
   );
 
+  // Component states
   const [genresSelection, setGenresSelection] =
     useState<GenresSelectionVariant>(
       selectedGenresInitial.length
@@ -41,6 +43,7 @@ const Genres = ({ setGenres }: SetGenresProp) => {
   const hasMounted = useRef(false);
 
   useEffect(() => {
+    // Get all genres from the API
     if (!hasMounted.current) {
       hasMounted.current = true;
       const fetchData = async () => {
@@ -48,7 +51,6 @@ const Genres = ({ setGenres }: SetGenresProp) => {
           const response = await fetch(`${API_ROUTE}/genres?key=${API_KEY}`);
           const result = await response.json();
           setGenresObj(result.results);
-          console.log(result);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -58,6 +60,7 @@ const Genres = ({ setGenres }: SetGenresProp) => {
     }
   }, []);
 
+  // Set selected genres array
   useEffect(() => {
     setGenres(
       genresSelection === GENRES_SELECTIONS.select.value
@@ -66,6 +69,7 @@ const Genres = ({ setGenres }: SetGenresProp) => {
     );
   }, [genresSelection, selectedGenres]);
 
+  // Events
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGenresSelection(
       (event.target as HTMLInputElement).value as GenresSelectionVariant
@@ -79,7 +83,6 @@ const Genres = ({ setGenres }: SetGenresProp) => {
     } else {
       setSelectedGenres(selectedGenres.filter((item) => item !== genre));
     }
-    console.log(selectedGenres);
   };
 
   return (

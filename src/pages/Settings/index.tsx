@@ -16,9 +16,11 @@ const SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Component states
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [selectedGenres, setSelectedGenres] = useState<GenresType>([]);
 
+  // Events
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -33,9 +35,11 @@ const SettingsPage = () => {
     navigate('/');
   };
 
+  // Set selected options
   const setPlatforms = (setPlatforms: string[]) => {
     setSelectedPlatforms(setPlatforms);
   };
+
   const setGenres = (setGenres: GenresType) => {
     setSelectedGenres(setGenres);
   };
