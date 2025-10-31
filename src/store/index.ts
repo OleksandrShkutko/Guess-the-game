@@ -10,6 +10,7 @@ import qiutGialogSliceReducer, {
 } from './slices/qiutDialogSlice';
 import gameSettingsReducer, {
   setSelectedPlatformIds,
+  setSelectedGenresIds,
   creareRequestUrl,
 } from './slices/gameSettingsSlice';
 
@@ -32,5 +33,6 @@ export {
   openQiutDialog,
   closeQiutDialog,
   setSelectedPlatformIds,
+  setSelectedGenresIds,
   creareRequestUrl,
 };

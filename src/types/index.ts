@@ -5,7 +5,7 @@ export type Game = {
   ganres: Genres;
 };
 
-export type Genres = number[];
+export type Genres = (number | string)[];
 
 export type GamesNames = string[];
 

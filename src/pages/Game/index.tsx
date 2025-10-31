@@ -53,6 +53,9 @@ const GamePage = () => {
   const rightAnsver = useSelector(
     (state: StoreType) => state.gameButtonsGrid.rightAnswer
   );
+  const selectedGenres = useSelector(
+    (state: StoreType) => state.settings.selectedGenres
+  );
 
   // Ref to track if component has mounted
   const hasMounted = useRef(false);
@@ -171,9 +174,8 @@ const GamePage = () => {
     countOfGamesWithGenre: number
   ): Promise<void> => {
     const formatGenres = genres.map((genre) => genre).join(',');
-    const formatGenresQueryString = formatGenres
-      ? `&genres=${formatGenres}`
-      : '';
+    const formatGenresQueryString =
+      formatGenres && !selectedGenres.length ? `&genres=${formatGenres}` : '';
     const randomGameWithGenreNumber: number = getRandomInt(
       1,
       countOfGamesWithGenre
@@ -190,9 +192,8 @@ const GamePage = () => {
   // Gets the total count of games with the specified genres
   const getCountOfGamesWithGenre = async (genres: Genres): Promise<number> => {
     const formatGenres = genres.map((genre) => genre).join(',');
-    const formatGenresQueryString = formatGenres
-      ? `&genres=${formatGenres}`
-      : '';
+    const formatGenresQueryString =
+      formatGenres && !selectedGenres.length ? `&genres=${formatGenres}` : '';
     const response = await fetch(
       `${requestUrl}${DEFAULT_QUERY_FOR_ONE_GAME}${formatGenresQueryString}`
     );

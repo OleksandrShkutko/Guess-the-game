@@ -14,7 +14,7 @@ type PlatformsSelection = {
 };
 type Platforms = { [key: string]: number[] };
 
-export const PLATFORMS_SESECTIONS: PlatformsSelection = {
+export const PLATFORMS_SELECTIONS: PlatformsSelection = {
   all: { value: 'all', label: 'All Platforms' },
   select: { value: 'select', label: 'Select Manually' },
 };
@@ -26,4 +26,19 @@ export const PLATFORMS: Platforms = {
   Sega: [167, 107, 117, 119, 74, 106, 77],
   Mobile: [3, 21],
   Atari: [28, 31, 23, 22, 25, 34, 46, 50],
+};
+
+// Genres constants
+export type GenresSelectionVariant = 'all' | 'select';
+type GenresSelectionItem = {
+  value: PlatformsSelectionVariant;
+  label: string;
+};
+type GenresSelection = {
+  [K in GenresSelectionVariant]: GenresSelectionItem;
+};
+
+export const GENRES_SELECTIONS: GenresSelection = {
+  all: { value: 'all', label: 'All Genres' },
+  select: { value: 'select', label: 'Select Manually' },
 };

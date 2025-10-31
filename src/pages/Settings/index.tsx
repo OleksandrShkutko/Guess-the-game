@@ -1,21 +1,29 @@
 import { Card, Typography, FormControl, Button, Stack } from '@mui/material';
-import CenteredContainer from '../../components/Container';
-import Platforms from './Platforms';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setSelectedPlatformIds, creareRequestUrl } from '../../store';
+import {
+  setSelectedPlatformIds,
+  setSelectedGenresIds,
+  creareRequestUrl,
+} from '../../store';
 import { useNavigate } from 'react-router-dom';
+import CenteredContainer from '../../components/Container';
+import Platforms from './Platforms';
+import Genres from './Genres';
+import { type Genres as GenresType } from '../../types';
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<GenresType>([]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     dispatch(setSelectedPlatformIds(selectedPlatforms));
+    dispatch(setSelectedGenresIds(selectedGenres));
     dispatch(creareRequestUrl());
 
     navigate('/');
@@ -27,6 +35,9 @@ const SettingsPage = () => {
 
   const setPlatforms = (setPlatforms: string[]) => {
     setSelectedPlatforms(setPlatforms);
+  };
+  const setGenres = (setGenres: GenresType) => {
+    setSelectedGenres(setGenres);
   };
 
   return (
@@ -44,7 +55,10 @@ const SettingsPage = () => {
           fullWidth
           sx={{ marginTop: 4, textAlign: 'left' }}
         >
-          <Platforms setPlatforms={setPlatforms} />
+          <Stack spacing={4}>
+            <Platforms setPlatforms={setPlatforms} />
+            <Genres setGenres={setGenres} />
+          </Stack>
 
           <Stack mt={4} direction='row' spacing={2} sx={{ width: '100%' }}>
             <Button
