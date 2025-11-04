@@ -21,7 +21,7 @@ type PlatformsProps = {
 };
 
 const Platforms = ({ setPlatforms }: PlatformsProps) => {
-  // Get best session score from the store
+  // Get platforms from the store
   const selectedPlatformsInitial = useSelector(
     (state: StoreType) => state.settings.selectedPlatforms
   );

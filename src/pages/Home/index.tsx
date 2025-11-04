@@ -7,8 +7,8 @@ import { useSelector } from 'react-redux';
 import { type StoreType } from '../../store';
 
 const Home = () => {
-  // Get best session score from the store
-  const bestSessionScore = useSelector(
+  // Get best game score from the store
+  const bestGameScore = useSelector(
     (state: StoreType) => state.gameScore.bestGameScore
   );
 
@@ -24,7 +24,7 @@ const Home = () => {
     <CenteredContainer>
       <Image.Logo className='logo' size={300} />
       <Typography variant='h5' align='center' color='primary' mt={2} mb={6}>
-        Best Session Score: {bestSessionScore}
+        Your Best Score: {bestGameScore}
       </Typography>
       <Stack spacing={2} direction={'column'} alignItems='center'>
         <Link to='/game'>

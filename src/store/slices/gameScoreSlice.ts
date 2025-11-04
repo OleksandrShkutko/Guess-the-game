@@ -1,14 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const bestGameScoreFromStore = Number(localStorage.getItem('bestGameScore'));
+
 const gameScoreSlice = createSlice({
   name: 'gameScore',
   initialState: {
-    bestGameScore: 0,
+    bestGameScore: bestGameScoreFromStore || 0,
   },
   reducers: {
     setGameScoreResult(state, action) {
       if (action.payload > state.bestGameScore) {
         state.bestGameScore = action.payload;
+        localStorage.setItem('bestGameScore', action.payload);
       }
     },
   },

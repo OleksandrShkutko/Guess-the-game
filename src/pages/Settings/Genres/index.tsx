@@ -22,7 +22,7 @@ type SetGenresProp = {
 };
 
 const Genres = ({ setGenres }: SetGenresProp) => {
-  // Get best session score from the store
+  // Get genres from the store
   const selectedGenresInitial = useSelector(
     (state: StoreType) => state.settings.selectedGenres
   );
