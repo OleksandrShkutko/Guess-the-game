@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import {
   setSelectedPlatformIds,
   setSelectedGenresIds,
+  setSelectedDatesRange,
   creareRequestUrl,
 } from '../../store';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +12,7 @@ import CenteredContainer from '../../components/Container';
 import Platforms from './Platforms';
 import Genres from './Genres';
 import { type Genres as GenresType } from '../../types';
+import ReleaseDate from './ReleaseDate';
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
@@ -19,6 +21,9 @@ const SettingsPage = () => {
   // Component states
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [selectedGenres, setSelectedGenres] = useState<GenresType>([]);
+  const [selectedDatesRangeState, setSelectedDatesRangeState] = useState<
+    string[]
+  >([]);
 
   // Events
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -26,6 +31,7 @@ const SettingsPage = () => {
 
     dispatch(setSelectedPlatformIds(selectedPlatforms));
     dispatch(setSelectedGenresIds(selectedGenres));
+    dispatch(setSelectedDatesRange(selectedDatesRangeState));
     dispatch(creareRequestUrl());
 
     navigate('/');
@@ -42,6 +48,32 @@ const SettingsPage = () => {
 
   const setGenres = (setGenres: GenresType) => {
     setSelectedGenres(setGenres);
+  };
+
+  const setReleaseYear = (setReleaseYear: number[]) => {
+    console.log(setReleaseYear);
+
+    const formatedDate = setReleaseYear.map((year, index, array) => {
+      if (index === array.length - 1) {
+        const currentDay = new Date();
+        const formaterCurrentDay = currentDay.toISOString().substring(0, 10);
+        const currentYear = new Date().getFullYear();
+
+        if (currentYear === year) {
+          return formaterCurrentDay;
+        } else {
+          const lastDay = new Date(year, 11, 31);
+          const formatedLastDay = lastDay.toISOString().substring(0, 10);
+          return formatedLastDay;
+        }
+      } else {
+        const firstDay = new Date(year, 1, 1);
+        const formatedFirstDay = firstDay.toISOString().substring(0, 10);
+        return formatedFirstDay;
+      }
+    });
+
+    setSelectedDatesRangeState(formatedDate);
   };
 
   return (
@@ -70,6 +102,7 @@ const SettingsPage = () => {
           <Stack spacing={4}>
             <Platforms setPlatforms={setPlatforms} />
             <Genres setGenres={setGenres} />
+            <ReleaseDate setReleaseYear={setReleaseYear} />
           </Stack>
 
           <Stack
