@@ -46,6 +46,16 @@ const ReleaseDate = ({ setReleaseYear }: ReleaseYearProps) => {
     return `${value}`;
   }
 
+  // Handle change from else place
+  useEffect(() => {
+    setIsChecked(datesRangeInitial && datesRangeInitial.length ? true : false);
+    setSliderValue(
+      datesRangeInitial && datesRangeInitial.length
+        ? yearsRangeInitial
+        : [minValue, maxValue]
+    );
+  }, [datesRangeInitial]);
+
   // Events
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);

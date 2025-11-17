@@ -14,8 +14,12 @@ const gameScoreSlice = createSlice({
         localStorage.setItem('bestGameScore', action.payload);
       }
     },
+    resetScoreResult(state) {
+      state.bestGameScore = 0;
+      localStorage.setItem('bestGameScore', '0');
+    },
   },
 });
 
-export const { setGameScoreResult } = gameScoreSlice.actions;
+export const { setGameScoreResult, resetScoreResult } = gameScoreSlice.actions;
 export default gameScoreSlice.reducer;

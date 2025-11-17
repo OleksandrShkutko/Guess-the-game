@@ -69,6 +69,16 @@ const Genres = ({ setGenres }: SetGenresProp) => {
     );
   }, [genresSelection, selectedGenres]);
 
+  // Handle change from else place
+  useEffect(() => {
+    setGenresSelection(
+      selectedGenresInitial.length
+        ? GENRES_SELECTIONS.select.value
+        : GENRES_SELECTIONS.all.value
+    );
+    setSelectedGenres(selectedGenresInitial);
+  }, [selectedGenresInitial]);
+
   // Events
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGenresSelection(

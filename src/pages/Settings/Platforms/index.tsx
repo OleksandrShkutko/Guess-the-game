@@ -46,6 +46,16 @@ const Platforms = ({ setPlatforms }: PlatformsProps) => {
     );
   }, [platformsSelection, selectedPlatforms]);
 
+  // Handle change from else place
+  useEffect(() => {
+    setPlatformsSelection(
+      selectedPlatformsInitial.length
+        ? PLATFORMS_SELECTIONS.select.value
+        : PLATFORMS_SELECTIONS.all.value
+    );
+    setSelectedPlatforms(selectedPlatformsInitial);
+  }, [selectedPlatformsInitial]);
+
   // Events
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPlatformsSelection(
@@ -82,6 +92,7 @@ const Platforms = ({ setPlatforms }: PlatformsProps) => {
           value={PLATFORMS_SELECTIONS.all.value}
           control={<Radio />}
           label={PLATFORMS_SELECTIONS.all.label}
+          checked={platformsSelection === PLATFORMS_SELECTIONS.all.value}
         />
         <FormControlLabel
           value={PLATFORMS_SELECTIONS.select.value}

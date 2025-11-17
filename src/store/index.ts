@@ -1,5 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import gameScoreReducer, { setGameScoreResult } from './slices/gameScoreSlice';
+import gameScoreReducer, {
+  setGameScoreResult,
+  resetScoreResult,
+} from './slices/gameScoreSlice';
 import gameButtonsGridSliceReducer, {
   setRightAnswer,
   setAnswer,
@@ -29,6 +32,7 @@ const store = configureStore({
 export {
   store,
   setGameScoreResult,
+  resetScoreResult,
   setRightAnswer,
   setAnswer,
   openQiutDialog,

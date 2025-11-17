@@ -1,38 +1,50 @@
-import { Card, Typography, FormControl, Button, Stack } from '@mui/material';
+import { Card, Typography, FormControl, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   setSelectedPlatformIds,
   setSelectedGenresIds,
   setSelectedDatesRange,
   creareRequestUrl,
+  resetScoreResult,
 } from '../../store';
-import { useNavigate } from 'react-router-dom';
+import { type Genres as GenresType } from '../../types';
 import CenteredContainer from '../../components/Container';
 import Platforms from './Platforms';
 import Genres from './Genres';
-import { type Genres as GenresType } from '../../types';
 import ReleaseDate from './ReleaseDate';
+import ButtonGrid from './ButtonsGrid';
+
+type SelectedPlatformsType = string[];
+type SelectedDatesRangeType = string[];
+
+type SelectedParamsType = {
+  selectedPlatforms: SelectedPlatformsType;
+  selectedGenres: GenresType;
+  selectedDatesRangeState: SelectedDatesRangeType;
+};
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Component states
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const [selectedPlatforms, setSelectedPlatforms] =
+    useState<SelectedPlatformsType>([]);
   const [selectedGenres, setSelectedGenres] = useState<GenresType>([]);
-  const [selectedDatesRangeState, setSelectedDatesRangeState] = useState<
-    string[]
-  >([]);
+  const [selectedDatesRangeState, setSelectedDatesRangeState] =
+    useState<SelectedDatesRangeType>([]);
 
   // Events
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    dispatch(setSelectedPlatformIds(selectedPlatforms));
-    dispatch(setSelectedGenresIds(selectedGenres));
-    dispatch(setSelectedDatesRange(selectedDatesRangeState));
-    dispatch(creareRequestUrl());
+    setSelectedParams({
+      selectedPlatforms,
+      selectedGenres,
+      selectedDatesRangeState,
+    });
 
     navigate('/');
   };
@@ -41,8 +53,34 @@ const SettingsPage = () => {
     navigate('/');
   };
 
+  const handleResetSettings = () => {
+    setSelectedParams();
+    resetStates();
+  };
+
+  const handleResetScore = () => {
+    dispatch(resetScoreResult());
+  };
+
+  const setSelectedParams = ({
+    selectedPlatforms = [],
+    selectedGenres = [],
+    selectedDatesRangeState = [],
+  }: Partial<SelectedParamsType> = {}) => {
+    dispatch(setSelectedPlatformIds(selectedPlatforms));
+    dispatch(setSelectedGenresIds(selectedGenres));
+    dispatch(setSelectedDatesRange(selectedDatesRangeState));
+    dispatch(creareRequestUrl());
+  };
+
+  const resetStates = () => {
+    setSelectedPlatforms([]);
+    setSelectedGenres([]);
+    setSelectedDatesRangeState([]);
+  };
+
   // Set selected options
-  const setPlatforms = (setPlatforms: string[]) => {
+  const setPlatforms = (setPlatforms: SelectedPlatformsType) => {
     setSelectedPlatforms(setPlatforms);
   };
 
@@ -51,8 +89,6 @@ const SettingsPage = () => {
   };
 
   const setReleaseYear = (setReleaseYear: number[]) => {
-    console.log(setReleaseYear);
-
     const formatedDate = setReleaseYear.map((year, index, array) => {
       if (index === array.length - 1) {
         const currentDay = new Date();
@@ -105,31 +141,11 @@ const SettingsPage = () => {
             <ReleaseDate setReleaseYear={setReleaseYear} />
           </Stack>
 
-          <Stack
-            position={'sticky'}
-            bottom={0}
-            mt={4}
-            direction='row'
-            spacing={2}
-            sx={{
-              width: '100%',
-            }}
-          >
-            <Button
-              variant='outlined'
-              sx={{
-                width: '50%',
-                backgroundColor: 'background.paper',
-                backgroundImage: 'var(--Paper-overlay)',
-              }}
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button variant='contained' type='submit' sx={{ width: '50%' }}>
-              Save settings
-            </Button>
-          </Stack>
+          <ButtonGrid
+            handleCancel={handleCancel}
+            handleResetScore={handleResetScore}
+            handleResetSettings={handleResetSettings}
+          />
         </FormControl>
       </Card>
     </CenteredContainer>
