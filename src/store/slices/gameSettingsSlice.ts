@@ -15,12 +15,21 @@ const requestUrlFromStorage = localStorage.getItem('requestUrl');
 const gameSettingsSlice = createSlice({
   name: 'gameSettings',
   initialState: {
+    isSettingsDialogOpen: false,
     requestUrl: requestUrlFromStorage || `${API_ROUTE}/games?key=${API_KEY}`,
     selectedPlatforms: (selectedPlatformsFromStorage || []) as string[],
     selectedGenres: (selectedGenresFromStorage || []) as string[],
     selectedDatesRange: (selectedDatesRangeFromStorage || []) as string[],
   },
   reducers: {
+    // Dialog open/close reducers
+    openSettingsDialog(state) {
+      state.isSettingsDialogOpen = true;
+    },
+    closeSettingsDialog(state) {
+      state.isSettingsDialogOpen = false;
+    },
+    // Game settings reducers
     setSelectedPlatformIds(state, action) {
       state.selectedPlatforms = action.payload;
       localStorage.setItem('selectedPlatforms', JSON.stringify(action.payload));
@@ -67,6 +76,8 @@ const gameSettingsSlice = createSlice({
 });
 
 export const {
+  openSettingsDialog,
+  closeSettingsDialog,
   setSelectedPlatformIds,
   creareRequestUrl,
   setSelectedGenresIds,

@@ -8,6 +8,8 @@ import {
   setSelectedDatesRange,
   creareRequestUrl,
   resetScoreResult,
+  openSettingsDialog,
+  closeSettingsDialog,
 } from '../../store';
 import { type Genres as GenresType } from '../../types';
 import CenteredContainer from '../../components/Container';
@@ -15,6 +17,7 @@ import Platforms from './Platforms';
 import Genres from './Genres';
 import ReleaseDate from './ReleaseDate';
 import ButtonGrid from './ButtonsGrid';
+import SettingsDialog from './SettingsDialog';
 
 type SelectedPlatformsType = string[];
 type SelectedDatesRangeType = string[];
@@ -35,31 +38,89 @@ const SettingsPage = () => {
   const [selectedGenres, setSelectedGenres] = useState<GenresType>([]);
   const [selectedDatesRangeState, setSelectedDatesRangeState] =
     useState<SelectedDatesRangeType>([]);
+  const [dialogProps, setDialogProps] = useState({});
 
   // Events
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setSelectedParams({
-      selectedPlatforms,
-      selectedGenres,
-      selectedDatesRangeState,
-    });
+    const dialogProps = {
+      title: 'Save Changes',
+      text: 'Are you sure you want to save your changes?',
+      confirmButton: {
+        text: 'Save',
+        color: 'success',
+        event: () => {
+          dispatch(closeSettingsDialog());
+          setSelectedParams({
+            selectedPlatforms,
+            selectedGenres,
+            selectedDatesRangeState,
+          });
 
-    navigate('/');
+          navigate('/');
+        },
+      },
+    };
+
+    setDialogProps(dialogProps);
+    dispatch(openSettingsDialog());
   };
 
   const handleCancel = () => {
-    navigate('/');
+    const dialogProps = {
+      title: 'Cancel Changes',
+      text: 'Are you sure you want to cancel your changes? All unsaved changes will be lost.',
+      confirmButton: {
+        text: 'Ok',
+        color: 'warning',
+        event: () => {
+          dispatch(closeSettingsDialog());
+          navigate('/');
+        },
+      },
+    };
+
+    setDialogProps(dialogProps);
+    dispatch(openSettingsDialog());
   };
 
   const handleResetSettings = () => {
-    setSelectedParams();
-    resetStates();
+    const dialogProps = {
+      title: 'Reset Settings',
+      text: 'Are you sure you want to reset your settings to default? This action cannot be undone.',
+      confirmButton: {
+        text: 'Reset',
+        color: 'error',
+        event: () => {
+          setSelectedParams();
+          resetStates();
+          dispatch(closeSettingsDialog());
+          navigate('/');
+        },
+      },
+    };
+
+    setDialogProps(dialogProps);
+    dispatch(openSettingsDialog());
   };
 
   const handleResetScore = () => {
-    dispatch(resetScoreResult());
+    const dialogProps = {
+      title: 'Reset Score',
+      text: 'Are you sure you want to reset your score? This action cannot be undone.',
+      confirmButton: {
+        text: 'Reset',
+        color: 'error',
+        event: () => {
+          dispatch(resetScoreResult());
+          dispatch(closeSettingsDialog());
+        },
+      },
+    };
+
+    setDialogProps(dialogProps);
+    dispatch(openSettingsDialog());
   };
 
   const setSelectedParams = ({
@@ -148,6 +209,8 @@ const SettingsPage = () => {
           />
         </FormControl>
       </Card>
+
+      <SettingsDialog dialogProps={dialogProps} />
     </CenteredContainer>
   );
 };
