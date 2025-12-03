@@ -16,14 +16,15 @@ const selectedMetacriticRatingFromStorage = localStorage.getItem(
 )
   ? JSON.parse(localStorage.getItem('selectedMetacriticRating') as string)
   : null;
-const requestUrlFromStorage = localStorage.getItem('requestUrl');
+const additiondalQueryStrings =
+  localStorage.getItem('additiondalQueryStrings') || '';
 
 // Create the slice
 const gameSettingsSlice = createSlice({
   name: 'gameSettings',
   initialState: {
     isSettingsDialogOpen: false,
-    requestUrl: requestUrlFromStorage || `${API_ROUTE}/games?key=${API_KEY}`,
+    requestUrl: `${API_ROUTE}/games?key=${API_KEY}${additiondalQueryStrings}`,
     selectedPlatforms: (selectedPlatformsFromStorage || []) as string[],
     selectedGenres: (selectedGenresFromStorage || []) as string[],
     selectedDatesRange: (selectedDatesRangeFromStorage || []) as string[],
@@ -96,7 +97,7 @@ const gameSettingsSlice = createSlice({
       const requestUrl = `${API_ROUTE}/games?key=${API_KEY}${additiondalQueryStrings}`;
 
       state.requestUrl = requestUrl;
-      localStorage.setItem('requestUrl', requestUrl);
+      localStorage.setItem('additiondalQueryStrings', additiondalQueryStrings);
     },
   },
 });
