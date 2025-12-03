@@ -17,6 +17,7 @@ import gameSettingsReducer, {
   setSelectedPlatformIds,
   setSelectedGenresIds,
   setSelectedDatesRange,
+  setSelectedMetacriticRating,
   creareRequestUrl,
 } from './slices/gameSettingsSlice';
 
@@ -44,5 +45,6 @@ export {
   setSelectedPlatformIds,
   setSelectedGenresIds,
   setSelectedDatesRange,
+  setSelectedMetacriticRating,
   creareRequestUrl,
 };

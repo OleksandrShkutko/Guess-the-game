@@ -9,35 +9,33 @@ import {
 import { useSelector } from 'react-redux';
 import type { StoreType } from '../../../store';
 
-type ReleaseYearProps = {
-  setReleaseYear: (platformIds: number[]) => void;
+type MetacriticRatingProps = {
+  setMetacriticRating: (platformIds: number[]) => void;
 };
 
-const ReleaseDate = ({ setReleaseYear }: ReleaseYearProps) => {
+const MetacriticRating = ({ setMetacriticRating }: MetacriticRatingProps) => {
   // Default slider value
-  const minValue = 1970;
-  const maxValue = new Date().getFullYear();
+  const minValue = 0;
+  const maxValue = 100;
 
-  // Get dates range from the store
-  const datesRangeInitial = useSelector(
-    (state: StoreType) => state.settings.selectedDatesRange
+  // Get rating from the store
+  const metacriticRatingInitial = useSelector(
+    (state: StoreType) => state.settings.selectedMetacriticRating
   );
-  const yearsRangeInitial: number[] = datesRangeInitial.map((date) => {
-    const year = date.split('-')[0];
-    return Number(year);
-  });
-  const isDatesRangeInitial =
-    datesRangeInitial && datesRangeInitial.length ? true : false;
+  const isMetacriticRatingInitial =
+    metacriticRatingInitial && metacriticRatingInitial.length ? true : false;
 
   // Component states
-  const [isChecked, setIsChecked] = useState<boolean>(isDatesRangeInitial);
+  const [isChecked, setIsChecked] = useState<boolean>(
+    isMetacriticRatingInitial
+  );
   const [sliderValue, setSliderValue] = useState<number[]>(
-    isDatesRangeInitial ? yearsRangeInitial : [minValue, maxValue]
+    isMetacriticRatingInitial ? metacriticRatingInitial : [minValue, maxValue]
   );
 
-  // Set selected years range array
+  // Set selected rating range array
   useEffect(() => {
-    setReleaseYear(isChecked ? sliderValue : []);
+    setMetacriticRating(isChecked ? sliderValue : []);
   }, [sliderValue, isChecked]);
 
   function valueText(value: number) {
@@ -46,11 +44,11 @@ const ReleaseDate = ({ setReleaseYear }: ReleaseYearProps) => {
 
   // Handle change from else place
   useEffect(() => {
-    setIsChecked(isDatesRangeInitial);
+    setIsChecked(isMetacriticRatingInitial);
     setSliderValue(
-      isDatesRangeInitial ? yearsRangeInitial : [minValue, maxValue]
+      isMetacriticRatingInitial ? metacriticRatingInitial : [minValue, maxValue]
     );
-  }, [datesRangeInitial]);
+  }, [metacriticRatingInitial]);
 
   // Events
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,8 +61,8 @@ const ReleaseDate = ({ setReleaseYear }: ReleaseYearProps) => {
 
   return (
     <Box component='section'>
-      <FormLabel id='date-slider' color='primary'>
-        Release Year Range
+      <FormLabel id='rating-slider' color='primary'>
+        Metacritic Rating
       </FormLabel>
 
       <Box>
@@ -72,12 +70,12 @@ const ReleaseDate = ({ setReleaseYear }: ReleaseYearProps) => {
           control={
             <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
           }
-          label='Select Release Year Range'
+          label='Enable Metacritic Rating Filter'
         />
         {isChecked && (
           <Slider
-            aria-labelledby='date-slider'
-            getAriaLabel={() => 'Release Year Range'}
+            aria-labelledby='rating-slider'
+            getAriaLabel={() => 'Temperature range'}
             value={sliderValue}
             min={minValue}
             max={maxValue}
@@ -92,4 +90,4 @@ const ReleaseDate = ({ setReleaseYear }: ReleaseYearProps) => {
   );
 };
 
-export default ReleaseDate;
+export default MetacriticRating;

@@ -6,6 +6,7 @@ import {
   setSelectedPlatformIds,
   setSelectedGenresIds,
   setSelectedDatesRange,
+  setSelectedMetacriticRating,
   creareRequestUrl,
   resetScoreResult,
   openSettingsDialog,
@@ -18,14 +19,17 @@ import Genres from './Genres';
 import ReleaseDate from './ReleaseDate';
 import ButtonGrid from './ButtonsGrid';
 import SettingsDialog from './SettingsDialog';
+import MetacriticRating from './MetacriticRating';
 
 type SelectedPlatformsType = string[];
 type SelectedDatesRangeType = string[];
+type selectedMetacriticRatingType = number[];
 
 type SelectedParamsType = {
   selectedPlatforms: SelectedPlatformsType;
   selectedGenres: GenresType;
   selectedDatesRangeState: SelectedDatesRangeType;
+  selectedMetacriticRatingState: selectedMetacriticRatingType;
 };
 
 const SettingsPage = () => {
@@ -38,9 +42,12 @@ const SettingsPage = () => {
   const [selectedGenres, setSelectedGenres] = useState<GenresType>([]);
   const [selectedDatesRangeState, setSelectedDatesRangeState] =
     useState<SelectedDatesRangeType>([]);
+  const [selectedMetacriticRatingState, setSelectedMetacriticRatingState] =
+    useState<selectedMetacriticRatingType>([]);
   const [dialogProps, setDialogProps] = useState({});
 
   // Events
+  // Handle form submit
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -56,6 +63,7 @@ const SettingsPage = () => {
             selectedPlatforms,
             selectedGenres,
             selectedDatesRangeState,
+            selectedMetacriticRatingState,
           });
 
           navigate('/');
@@ -67,6 +75,7 @@ const SettingsPage = () => {
     dispatch(openSettingsDialog());
   };
 
+  // Handle buttons events
   const handleCancel = () => {
     const dialogProps = {
       title: 'Cancel Changes',
@@ -85,6 +94,7 @@ const SettingsPage = () => {
     dispatch(openSettingsDialog());
   };
 
+  // Reset settings to default
   const handleResetSettings = () => {
     const dialogProps = {
       title: 'Reset Settings',
@@ -105,6 +115,7 @@ const SettingsPage = () => {
     dispatch(openSettingsDialog());
   };
 
+  // Reset score
   const handleResetScore = () => {
     const dialogProps = {
       title: 'Reset Score',
@@ -123,21 +134,26 @@ const SettingsPage = () => {
     dispatch(openSettingsDialog());
   };
 
+  // Set selected params in the store
   const setSelectedParams = ({
     selectedPlatforms = [],
     selectedGenres = [],
     selectedDatesRangeState = [],
+    selectedMetacriticRatingState = [],
   }: Partial<SelectedParamsType> = {}) => {
     dispatch(setSelectedPlatformIds(selectedPlatforms));
     dispatch(setSelectedGenresIds(selectedGenres));
     dispatch(setSelectedDatesRange(selectedDatesRangeState));
+    dispatch(setSelectedMetacriticRating(selectedMetacriticRatingState));
     dispatch(creareRequestUrl());
   };
 
+  // Reset component states
   const resetStates = () => {
     setSelectedPlatforms([]);
     setSelectedGenres([]);
     setSelectedDatesRangeState([]);
+    setSelectedMetacriticRatingState([]);
   };
 
   // Set selected options
@@ -173,6 +189,10 @@ const SettingsPage = () => {
     setSelectedDatesRangeState(formatedDate);
   };
 
+  const setMetacriticRating = (setMetacriticRating: number[]) => {
+    setSelectedMetacriticRatingState(setMetacriticRating);
+  };
+
   return (
     <CenteredContainer>
       <Card
@@ -200,6 +220,7 @@ const SettingsPage = () => {
             <Platforms setPlatforms={setPlatforms} />
             <Genres setGenres={setGenres} />
             <ReleaseDate setReleaseYear={setReleaseYear} />
+            <MetacriticRating setMetacriticRating={setMetacriticRating} />
           </Stack>
 
           <ButtonGrid
