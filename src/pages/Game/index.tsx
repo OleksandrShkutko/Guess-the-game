@@ -138,10 +138,12 @@ const GamePage = () => {
         (genre: { id: number }) => genre.id
       );
 
+      const optimizedImageUrl = optimizeImageUrl(gameImage);
+
       gameInfoObj = {
         id: gameId,
         name: gameName,
-        background_image: gameImage,
+        background_image: optimizedImageUrl,
         ganres: gameGenres,
       };
 
@@ -150,6 +152,11 @@ const GamePage = () => {
       setIsPending(false);
       setError(err instanceof Error ? err.message : 'Something went wrong');
     }
+  };
+
+  // Optimizes image URL for better performance
+  const optimizeImageUrl = (url: string, width: number = 600): string => {
+    return url.replace('media/', `media/resize/${width}/-/`);
   };
 
   // Gets a new random game and updates the state
