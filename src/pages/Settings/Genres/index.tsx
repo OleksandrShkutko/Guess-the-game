@@ -18,7 +18,7 @@ import { API_KEY, API_ROUTE } from '../../../constants';
 import { type Genres as GenretType } from '../../../types';
 
 type SetGenresProp = {
-  setGenres: (platformIds: string[]) => void;
+  setGenres: (gengesIds: string[]) => void;
 };
 
 const Genres = ({ setGenres }: SetGenresProp) => {

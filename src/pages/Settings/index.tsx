@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
+  setSelectedImageType as setSelectedImageTypeAction,
   setSelectedPlatformIds,
   setSelectedGenresIds,
   setSelectedDatesRange,
@@ -20,12 +21,15 @@ import ReleaseDate from './ReleaseDate';
 import ButtonGrid from './ButtonsGrid';
 import SettingsDialog from './SettingsDialog';
 import MetacriticRating from './MetacriticRating';
+import GameImageType from './GameImageType';
 
+type SelectedImageType = string | null;
 type SelectedPlatformsType = string[];
 type SelectedDatesRangeType = string[];
 type selectedMetacriticRatingType = number[];
 
 type SelectedParamsType = {
+  selectedImageType: SelectedImageType;
   selectedPlatforms: SelectedPlatformsType;
   selectedGenres: GenresType;
   selectedDatesRangeState: SelectedDatesRangeType;
@@ -37,6 +41,8 @@ const SettingsPage = () => {
   const navigate = useNavigate();
 
   // Component states
+  const [selectedImageType, setSelectedImageType] =
+    useState<SelectedImageType>(null);
   const [selectedPlatforms, setSelectedPlatforms] =
     useState<SelectedPlatformsType>([]);
   const [selectedGenres, setSelectedGenres] = useState<GenresType>([]);
@@ -60,6 +66,7 @@ const SettingsPage = () => {
         event: () => {
           dispatch(closeSettingsDialog());
           setSelectedParams({
+            selectedImageType,
             selectedPlatforms,
             selectedGenres,
             selectedDatesRangeState,
@@ -136,11 +143,13 @@ const SettingsPage = () => {
 
   // Set selected params in the store
   const setSelectedParams = ({
+    selectedImageType = null,
     selectedPlatforms = [],
     selectedGenres = [],
     selectedDatesRangeState = [],
     selectedMetacriticRatingState = [],
   }: Partial<SelectedParamsType> = {}) => {
+    dispatch(setSelectedImageTypeAction(selectedImageType));
     dispatch(setSelectedPlatformIds(selectedPlatforms));
     dispatch(setSelectedGenresIds(selectedGenres));
     dispatch(setSelectedDatesRange(selectedDatesRangeState));
@@ -154,6 +163,11 @@ const SettingsPage = () => {
     setSelectedGenres([]);
     setSelectedDatesRangeState([]);
     setSelectedMetacriticRatingState([]);
+  };
+
+  // Set image type
+  const setImageType = (imageType: SelectedImageType) => {
+    setSelectedImageType(imageType);
   };
 
   // Set selected options
@@ -217,6 +231,7 @@ const SettingsPage = () => {
           sx={{ mt: 4, textAlign: 'left', position: 'relative' }}
         >
           <Stack spacing={4}>
+            <GameImageType setImageType={setImageType} />
             <Platforms setPlatforms={setPlatforms} />
             <Genres setGenres={setGenres} />
             <ReleaseDate setReleaseYear={setReleaseYear} />

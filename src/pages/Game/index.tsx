@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef, createContext } from 'react';
 import { useLoaderData } from 'react-router-dom';
-import { DEFAULT_QUERY_FOR_ONE_GAME } from '../../constants';
+import {
+  API_KEY,
+  API_ROUTE,
+  DEFAULT_QUERY_FOR_ONE_GAME,
+  IMAGE_TYPE_SELECTION,
+} from '../../constants';
 import type { Game, Genres, GamesNames } from '../../types';
 import GameBlock from './components/GameBlock';
 import Spinner from '../../components/Spinner';
@@ -46,6 +51,9 @@ const GamePage = () => {
   // Get data from the store
   const requestUrl = useSelector(
     (state: StoreType) => state.settings.requestUrl
+  );
+  const imageType = useSelector(
+    (state: StoreType) => state.settings.selectedImageType
   );
   const answer = useSelector(
     (state: StoreType) => state.gameButtonsGrid.answer
@@ -132,22 +140,58 @@ const GamePage = () => {
       const data = await response.json();
 
       const gameName = data.results[0].name;
-      const gameImage = data.results[0].background_image;
+      let gameImage;
+      let optimizedImageUrl;
+      if (imageType === IMAGE_TYPE_SELECTION.screenshot.value) {
+        const gameId = data.results[0].id;
+        const screenshotsReqestUrl = `${API_ROUTE}/games/${gameId}/screenshots?key=${API_KEY}`;
+
+        try {
+          const screenshotsResponse = await fetch(screenshotsReqestUrl);
+          const screenshotsData = await screenshotsResponse.json();
+          const randomScreenshotIndex = getRandomInt(
+            0,
+            screenshotsData.results.length - 1
+          );
+          gameImage = screenshotsData.results[randomScreenshotIndex].image;
+          optimizedImageUrl = gameImage;
+        } catch {
+          gameImage = data.results[0].background_image;
+          optimizedImageUrl = optimizeImageUrl(gameImage);
+        }
+      } else {
+        gameImage = data.results[0].background_image;
+        optimizedImageUrl = optimizeImageUrl(gameImage);
+      }
       const gameId = data.results[0].id;
       const gameGenres = data.results[0].genres.map(
         (genre: { id: number }) => genre.id
       );
 
-      const optimizedImageUrl = optimizeImageUrl(gameImage);
-
       gameInfoObj = {
         id: gameId,
         name: gameName,
-        background_image: optimizedImageUrl,
+        image: optimizedImageUrl,
         ganres: gameGenres,
       };
 
       return gameInfoObj;
+    } catch (err) {
+      setIsPending(false);
+      setError(err instanceof Error ? err.message : 'Something went wrong');
+    }
+  };
+
+  // Fetches a random game name from the API
+  const requestRandomGameName = async (url: string): Promise<string | void> => {
+    let gameName: string;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      gameName = data.results[0].name;
+
+      return gameName;
     } catch (err) {
       setIsPending(false);
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -189,10 +233,10 @@ const GamePage = () => {
     );
     const finalRequestUrl: string = `${requestUrl}${DEFAULT_QUERY_FOR_ONE_GAME}${formatGenresQueryString}&page=${randomGameWithGenreNumber}`;
 
-    const gameWithGenreInfoObj = await requestRandomGame(finalRequestUrl);
+    const gameWithGenreName = await requestRandomGameName(finalRequestUrl);
 
-    if (typeof gameWithGenreInfoObj === 'object') {
-      setGamesNames((prevNames) => [...prevNames, gameWithGenreInfoObj.name]);
+    if (typeof gameWithGenreName === 'string') {
+      setGamesNames((prevNames) => [...prevNames, gameWithGenreName]);
     }
   };
 

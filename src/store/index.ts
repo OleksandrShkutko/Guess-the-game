@@ -14,6 +14,7 @@ import qiutGialogSliceReducer, {
 import gameSettingsReducer, {
   openSettingsDialog,
   closeSettingsDialog,
+  setSelectedImageType,
   setSelectedPlatformIds,
   setSelectedGenresIds,
   setSelectedDatesRange,
@@ -42,6 +43,7 @@ export {
   closeQiutDialog,
   openSettingsDialog,
   closeSettingsDialog,
+  setSelectedImageType,
   setSelectedPlatformIds,
   setSelectedGenresIds,
   setSelectedDatesRange,

@@ -2,6 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { API_ROUTE, API_KEY, PLATFORMS } from '../../constants';
 
 // Retrieve initial state from localStorage
+const selectedImageTypeFromStorage = localStorage.getItem('selectedImageType')
+  ? JSON.parse(localStorage.getItem('selectedImageType') as string)
+  : null;
 const selectedPlatformsFromStorage = localStorage.getItem('selectedPlatforms')
   ? JSON.parse(localStorage.getItem('selectedPlatforms') as string)
   : null;
@@ -25,6 +28,7 @@ const gameSettingsSlice = createSlice({
   initialState: {
     isSettingsDialogOpen: false,
     requestUrl: `${API_ROUTE}/games?key=${API_KEY}${additiondalQueryStrings}`,
+    selectedImageType: (selectedImageTypeFromStorage || null) as string | null,
     selectedPlatforms: (selectedPlatformsFromStorage || []) as string[],
     selectedGenres: (selectedGenresFromStorage || []) as string[],
     selectedDatesRange: (selectedDatesRangeFromStorage || []) as string[],
@@ -40,6 +44,11 @@ const gameSettingsSlice = createSlice({
       state.isSettingsDialogOpen = false;
     },
     // Game settings reducers
+    // Set selected image type
+    setSelectedImageType(state, action) {
+      state.selectedImageType = action.payload;
+      localStorage.setItem('selectedImageType', JSON.stringify(action.payload));
+    },
     // Set selected platforms
     setSelectedPlatformIds(state, action) {
       state.selectedPlatforms = action.payload;
@@ -107,6 +116,7 @@ export const {
   closeSettingsDialog,
   setSelectedPlatformIds,
   creareRequestUrl,
+  setSelectedImageType,
   setSelectedGenresIds,
   setSelectedDatesRange,
   setSelectedMetacriticRating,

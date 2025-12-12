@@ -3,6 +3,21 @@ export const API_ROUTE = 'https://api.rawg.io/api';
 export const API_KEY = '88e766ec5eab4f58a54e1dd4b35321d2';
 export const DEFAULT_QUERY_FOR_ONE_GAME = '&page_size=1';
 
+// Image type constants
+export type ImageTypeSelectionVariant = 'background' | 'screenshot';
+type ImageTypeSelectionItem = {
+  value: ImageTypeSelectionVariant;
+  label: string;
+};
+type ImageTypeSelection = {
+  [K in ImageTypeSelectionVariant]: ImageTypeSelectionItem;
+};
+
+export const IMAGE_TYPE_SELECTION: ImageTypeSelection = {
+  background: { value: 'background', label: 'Background Image' },
+  screenshot: { value: 'screenshot', label: 'Screenshot' },
+};
+
 // Platform constants
 export type PlatformsSelectionVariant = 'all' | 'select';
 type PlatformsSelectionItem = {
@@ -31,7 +46,7 @@ export const PLATFORMS: Platforms = {
 // Genres constants
 export type GenresSelectionVariant = 'all' | 'select';
 type GenresSelectionItem = {
-  value: PlatformsSelectionVariant;
+  value: GenresSelectionVariant;
   label: string;
 };
 type GenresSelection = {

@@ -21,7 +21,7 @@ const GameBlock = ({ gameInfo, gamesNames }: GameBlockProps) => {
         backgroundImage: 'none',
       }}
     >
-      <GameImage image={gameInfo.background_image} />
+      <GameImage image={gameInfo.image} />
       <GameButtonsGrid gamesNames={gamesNames} />
     </Card>
   );
